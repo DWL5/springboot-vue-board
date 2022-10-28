@@ -30,6 +30,13 @@ public class BoardService {
         return BoardResponse.toList(boards);
     }
 
+    @Transactional(readOnly = true)
+    public BoardResponse read(Long id) {
+        Board board = boardRepository.findById(id).orElseThrow(
+                RuntimeException::new);
+        return BoardResponse.from(board);
+    }
+
     @Transactional
     public Long update(BoardRequest boardRequest) {
         Board board = boardRepository.save(boardRequest.toEntity());

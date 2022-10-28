@@ -13,9 +13,9 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(row, idx) in list" :key="idx">
+      <tr v-for="(row, id) in list" :key="id">
         <td>{{ row.id }}</td>
-        <td><a v-on:click="fnView(`${row.idx}`)">{{ row.title }}</a></td>
+        <td><a v-on:click="fnView(`${row.id}`)">{{ row.title }}</a></td>
         <td>{{ row.author }}</td>
         <td>{{ row.createdAt }}</td>
       </tr>
@@ -95,6 +95,26 @@ export default {
           alert('네트워크가 원활하지 않습니다. \n잠시 후 다시 시도해주세요.')
         }
       })
+    },
+
+    fnView(id) {
+      this.requestBody={}
+      this.requestBody.id = id
+      this.$router.push({
+        path: './detail',
+        query: this.requestBody
+      })
+    },
+    fnWrite() {
+      this.$router.push({
+        path:'./write'
+      })
+    },
+    fnPage(n) {
+      if (this.page !== n) {
+        this.page = n
+        this.fnGetList()
+      }
     }
   }
 }
