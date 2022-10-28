@@ -14,10 +14,10 @@
       </thead>
       <tbody>
       <tr v-for="(row, idx) in list" :key="idx">
-        <td>{{ row.idx }}</td>
+        <td>{{ row.id }}</td>
         <td><a v-on:click="fnView(`${row.idx}`)">{{ row.title }}</a></td>
         <td>{{ row.author }}</td>
-        <td>{{ row.created_at }}</td>
+        <td>{{ row.createdAt }}</td>
       </tr>
       </tbody>
     </table>
@@ -79,26 +79,22 @@ export default {
   },
   methods: {
     fnGetList() {
-      this.list = [
-        {
-          "idx":1,
-          "title": "제목1",
-          "author": "작성자1",
-          "created_at": "작성일시1"
-        },
-        {
-          "idx":1,
-          "title": "제목1",
-          "author": "작성자1",
-          "created_at": "작성일시1"
-        },
-        {
-          "idx":1,
-          "title": "제목1",
-          "author": "작성자1",
-          "created_at": "작성일시1"
+      this.requestBody = {
+        keyword: this.keyword,
+        page: this.page,
+        size: this.size
+      }
+
+      this.$axios.get(this.$serverUrl + "/boards", {
+        params: this.requestBody,
+        headers: {}
+      }).then((res) => {
+        this.list = res.data
+      }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('네트워크가 원활하지 않습니다. \n잠시 후 다시 시도해주세요.')
         }
-      ]
+      })
     }
   }
 }
